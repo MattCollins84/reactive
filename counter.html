@@ -1,0 +1,31 @@
+<html>
+    <head>
+    <title>Counter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.3.1/Rx.min.js"></script>
+  </head>
+  <body>
+
+  </body>
+
+  <button id="up">UP</button>
+  <button id="down">DOWN</button>
+
+  <script>
+
+    var upBtn = document.getElementById('up');
+    var up$ = Rx.Observable.fromEvent(upBtn, 'click')
+              .mapTo(1);
+
+    var downBtn = document.getElementById('down');
+    var down$ = Rx.Observable.fromEvent(downBtn, 'click')
+                .mapTo(-1);
+
+    var counter$ =  up$.merge(down$)
+                    .scan((acc, i) => acc + i, 0);
+
+    counter$.subscribe(function(x) {
+      console.log(x);
+    })
+    
+  </script>
+</html>

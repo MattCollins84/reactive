@@ -1,0 +1,38 @@
+<html>
+	<head>
+    <title>Keypresses</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.3.1/Rx.min.js"></script>
+  </head>
+  <body>
+
+  </body>
+  <script>
+
+    var sumFunc = (sum, i) => sum + parseInt(i)
+
+    var eventStream$ =  Rx.Observable
+                        .fromEvent(document, 'keydown');
+
+    var keyStream$ =  eventStream$
+                      .map(e => e.key || null);                  
+
+    var letter$ = keyStream$.filter(k => k.match(/[a-z]/g))
+                  .bufferCount(4, 1)
+                  .map(keys => keys.join("").toLowerCase())
+
+    var number$ = keyStream$.filter(k => k.match(/[0-9]/g))
+                  .bufferCount(2, 1)
+                  .map(keys => keys.reduce(sumFunc, 0))
+
+
+    var matt$ =  letter$.filter(k => k === "matt")
+    matt$.subscribe(console.log);
+
+    var dave$ =  letter$.filter(k => k === "dave")
+    dave$.subscribe(console.log);
+
+    var gt10$ =  number$.filter(n => n > 10);
+    gt10$.subscribe(console.log);
+    
+  </script>
+</html>
